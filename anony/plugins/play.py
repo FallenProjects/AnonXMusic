@@ -63,6 +63,17 @@ async def play_hndlr(
             file.message_id = sent.id
         else:
             file = await yt.search(url, sent.id, video=video)
+            if isinstance(file, list):
+                tracks = file
+                if not tracks:
+                    return await sent.edit_text(
+                        m.lang["play_not_found"].format(config.SUPPORT_CHAT)
+                    )
+                file = tracks[0]
+                tracks.remove(file)
+                file.message_id = sent.id
+                for track in tracks:
+                    track.user = mention
 
         if not file:
             return await sent.edit_text(
@@ -72,6 +83,18 @@ async def play_hndlr(
     elif len(m.command) >= 2:
         query = " ".join(m.command[1:])
         file = await yt.search(query, sent.id, video=video)
+        if isinstance(file, list):
+            tracks = file
+            if not tracks:
+                return await sent.edit_text(
+                    m.lang["play_not_found"].format(config.SUPPORT_CHAT)
+                )
+            file = tracks[0]
+            tracks.remove(file)
+            file.message_id = sent.id
+            for track in tracks:
+                track.user = mention
+
         if not file:
             return await sent.edit_text(
                 m.lang["play_not_found"].format(config.SUPPORT_CHAT)
@@ -121,7 +144,7 @@ async def play_hndlr(
             file.file_path = fname
         else:
             await sent.edit_text(m.lang["play_downloading"])
-            file.file_path = await yt.download(file.id, video=video)
+            file.file_path = await yt.download(file.id, video=video, _url=file.url)
 
     await anon.play_media(chat_id=m.chat.id, message=sent, media=file)
     if not tracks:

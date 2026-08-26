@@ -94,7 +94,7 @@ async def _controls(_, query: types.CallbackQuery):
 
         msg = await app.send_message(chat_id=chat_id, text=query.lang["play_next"])
         if not media.file_path:
-            media.file_path = await yt.download(media.id, video=media.video)
+            media.file_path = await yt.download(media.id, video=media.video, _url=media.url)
         media.message_id = msg.id
         return await anon.play_media(chat_id, msg, media)
 

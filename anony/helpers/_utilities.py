@@ -37,6 +37,10 @@ class Utilities:
         parts = [int(p) for p in time.strip().split(":")]
         return sum(value * 60**i for i, value in enumerate(reversed(parts)))
 
+    def seconds_to_min(self, dur_sec):
+        minutes = int(dur_sec) // 60
+        seconds = int(dur_sec) % 60
+        return f"{minutes:02d}:{seconds:02d}"
 
     def get_url(self, message_1: types.Message) -> str | None:
         link = None

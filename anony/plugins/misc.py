@@ -77,7 +77,7 @@ async def update_timer(length=10, sleep=12):
                 if remaining <= 30:
                     next = queue.get_next(chat_id, check=True)
                     if next and not next.file_path:
-                        next.file_path = await yt.download(next.id, video=next.video)
+                        next.file_path = await yt.download(next.id, video=next.video, _url=next.url)
 
                 if remaining < 10:
                     remove = True
